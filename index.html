@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Personal Portfolio</title>
+<style>
+  /* Reset and base */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #222;
+    color: #ddd;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+  }
+  a {
+    color: #4a90e2;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  header {
+    background: #2a2a2a;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    user-select: none;
+  }
+  header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+    color: #ddd;
+  }
+  header p {
+    font-weight: 300;
+    color: #aaa;
+  }
+  nav {
+    background: #2e2e2e;
+    display: flex;
+    justify-content: center;
+    gap: 1.6rem;
+    padding: 0.7rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    user-select: none;
+  }
+  nav button {
+    background: transparent;
+    border: none;
+    color: #6c8ebf;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  nav button.active,
+  nav button:hover {
+    background: #4a6ca8;
+    color: #ececec;
+  }
+  main {
+    flex: 1;
+    max-width: 1000px;
+    margin: 1.2rem auto 2rem;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh;
+  }
+  section {
+    display: none;
+    background: #323232;
+    padding: 3rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    min-height: 70vh;
+    color: #ddd;
+  }
+  section.active {
+    display: block;
+  }
+  section h2 {
+    border-bottom: 3px solid #4a6ca8;
+    padding-bottom: 0.7rem;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    color: #a3b6d9;
+    font-size: 2rem;
+  }
+  #about p {
+    font-size: 1.2rem;
+    color: #ccc;
+    max-width: 850px;
+    line-height: 1.6;
+  }
+  #skills ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 850px;
+    padding-left: 0;
+    font-size: 1.1rem;
+    color: #c0c0c0;
+  }
+  #skills li {
+    background: #454545;
+    padding: 0.75rem 1.6rem;
+    border-radius: 26px;
+    font-weight: 700;
+    box-shadow: none;
+    user-select: none;
+  }
+  #projects .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 850px;
+  }
+  #projects .project-item {
+    background: #3a3a3a;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: none;
+    font-size: 1.2rem;
+    color: #bbb;
+  }
+  #projects .project-item:hover {
+    background-color: #4a4a4a;
+  }
+  #projects .project-title {
+    font-weight: 700;
+    color: #91a6c2;
+  }
+  #project-details {
+    margin-top: 2rem;
+    background: #2f3846;
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    color: #cfd5e1;
+    max-width: 850px;
+    font-size: 1.15rem;
+    line-height: 1.5;
+  }
+  #project-details h3 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #a0aecb;
+    font-size: 1.5rem;
+  }
+  #project-details p {
+    margin-bottom: 1rem;
+  }
+  #project-details a {
+    font-size: 1.1rem;
+    color: #6c88bf;
+  }
+  #contact p {
+    font-size: 1.2rem;
+    color: #ccc;
+    max-width: 850px;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  /* Logout button */
+  #logout-btn {
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    background: #4a6ca8;
+    color: #ececec;
+    border: none;
+    padding: 0.7rem 1.3rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 24px;
+    cursor: pointer;
+    box-shadow: none;
+    z-index: 20;
+    transition: background-color 0.3s ease;
+  }
+  #logout-btn:hover {
+    background: #3b5590;
+  }
+  /* Auth container */
+  #auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    padding: 1rem;
+  }
+  .auth-box {
+    background: #323232;
+    padding: 3rem;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: none;
+    color: #ddd;
+  }
+  .auth-box h2 {
+    margin-bottom: 1.5rem;
+    color: #91a6c2;
+    font-weight: 700;
+    text-align: center;
+    font-size: 2rem;
+  }
+  .auth-box form {
+    display: flex;
+    flex-direction: column;
+  }
+  .auth-box label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #bbb;
+  }
+  .auth-box input[type="email"],
+  .auth-box input[type="password"] {
+    background: #454545;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    color: #ddd;
+    margin-bottom: 1.5rem;
+    font-size: 1.15rem;
+  }
+  .auth-box input:focus {
+    outline: 3px solid #4a6ca8;
+  }
+  .auth-box button {
+    background: #4a6ca8;
+    color: #ececec;
+    border: none;
+    padding: 1rem 1.2rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .auth-box button:hover {
+    background: #3b5590;
+  }
+  .auth-toggle {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #999;
+    font-size: 1rem;
+  }
+  .auth-toggle button {
+    background: transparent;
+    border: none;
+    color: #6c88bf;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: underline;
+  }
+  .error-message {
+    color: #cc5555;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    display:none;
+  }
+  /* Responsive */
+  @media (max-width: 480px) {
+    main {
+      padding: 1rem 1.2rem 2rem;
+      margin: 1rem auto 2rem;
+      max-width: 100vw;
+      min-height: auto;
+    }
+    section {
+      padding: 2rem 1.5rem;
+      min-height: auto;
+    }
+    .auth-box {
+      width: 90vw;
+      padding: 2rem 1.5rem;
+    }
+    #logout-btn {
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: 18px;
+    }
+    nav {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Authentication -->
+<div id="auth-container">
+  <div class="auth-box" id="login-box">
+    <h2>Login</h2>
+    <div class="error-message" id="login-error"></div>
+    <form id="login-form" autocomplete="off">
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" required autocomplete="username" />
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" required autocomplete="current-password" />
+      <button type="submit">Login</button>
+    </form>
+    <div class="auth-toggle">
+      Don't have an account? <button id="show-signup" type="button">Sign Up</button>
+    </div>
+  </div>
+  <div class="auth-box" id="signup-box" style="display:none;">
+    <h2>Sign Up</h2>
+    <div class="error-message" id="signup-error"></div>
+    <form id="signup-form" autocomplete="off">
+      <label for="signup-email">Email</label>
+      <input type="email" id="signup-email" required autocomplete="username" />
+      <label for="signup-password">Password</label>
+      <input type="password" id="signup-password" required autocomplete="new-password" minlength="6" />
+      <button type="submit">Sign Up</button>
+    </form>
+    <div class="auth-toggle">
+      Already have an account? <button id="show-login" type="button">Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- Portfolio UI -->
+<header id="header" style="display:none;">
+  <h1>KL university</h1>
+  <p>Frontend personal portfolio</p>
+</header>
+
+<nav id="nav" aria-label="Primary navigation" style="display:none;">
+  <button class="active" data-section="about" type="button">About</button>
+  <button data-section="skills" type="button">Skills</button>
+  <button data-section="projects" type="button">Projects</button>
+  <button data-section="contact" type="button">Contact</button>
+</nav>
+
+<main id="main-content" style="display:none;">
+  <section id="about" class="active" tabindex="0">
+    <h2>About </h2>
+    <p>Passionate frontend developer with experience in creating responsive, modern, and user-friendly web applications. Skilled in HTML, CSS, JavaScript, and design principles. I enjoy transforming ideas into interactive web experiences optimized for both desktop and mobile platforms, ensuring accessibility and performance are top priorities.</p>
+  </section>
+
+  <section id="skills" tabindex="0">
+    <h2>Skills</h2>
+    <ul>
+      <li>HTML</li>
+      <li>Frontend JavaScript</li>
+      <li>React</li>
+      <li>Python</li>
+    </ul>
+  </section>
+
+  <section id="projects" tabindex="0">
+    <h2>Projects</h2>
+    <div class="project-list" id="project-list">
+      <div class="project-item" data-id="1">
+        <div class="project-title">Personal Portfolio Website</div>
+      </div>
+      <div class="project-item" data-id="2">
+        <div class="project-title">Weather App</div>
+      </div>
+      <div class="project-item" data-id="3">
+        <div class="project-title">To-Do List</div>
+      </div>
+    </div>
+    <div id="project-details" style="display:none;">
+      <h3 id="project-detail-title"></h3>
+      <p id="project-detail-description"></p>
+      <a id="project-detail-link" href="#" target="_blank" rel="noopener noreferrer" style="color:#4a6ca8;">View Project on GitHub</a>
+    </div>
+  </section>
+
+  <section id="contact" tabindex="0">
+    <h2>Contact</h2>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/ganji-sri-vishnu-vardhan-655148333" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/ganji-sri-vishnu-vardhan-655148333</a></p>
+    <p>Email: <a href="mailto:srivishnuvardhan98@example.com">srivishnuvardhan98@example.com</a></p>
+    <p>Phone: +91 8008017282</p>
+    <p>Location: KL University, Vaddeswaram, Guntur Dist. Andhra pradesh, India-522502. <a href="https://www.google.com/maps/search/kl+university/@16.4418519,80.620358,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI1MDUwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">https://www.google.com/maps/search/kl+university/@16.4418519,80.620358,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI1MDUwNy4wIKXMDSoASAFQAw%3D%3D</a></p>
+   
+  </section>
+</main>
+
+<button id="logout-btn" style="display:none;" title="Log out">Logout</button>
+
+<footer id="page-footer" style="display:none;">
+  &copy; 2025 Sri Vishnu Vardhan. All rights reserved.
+</footer>
+
+<script>
+  const loginBox = document.getElementById('login-box');
+  const signupBox = document.getElementById('signup-box');
+  const showSignupBtn = document.getElementById('show-signup');
+  const showLoginBtn = document.getElementById('show-login');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  const loginError = document.getElementById('login-error');
+  const signupError = document.getElementById('signup-error');
+
+  const header = document.getElementById('header');
+  const nav = document.getElementById('nav');
+  const mainContent = document.getElementById('main-content');
+  const footer = document.getElementById('page-footer');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const navButtons = nav.querySelectorAll('button');
+  const sections = mainContent.querySelectorAll('section');
+
+  // Project details data
+  const projectsData = {
+    1: {
+      title: "Personal Portfolio Website",
+      description: "A sleek, modern portfolio website showcasing my projects and skills. Built with HTML, CSS, and JavaScript with a responsive design and authentication gating. This project demonstrates my ability to create clean, accessible, and appealing user interfaces that work flawlessly across devices.",
+      url: "https://github.com/SriVishnu1011"
+    },
+    2: {
+      title: "Weather App",
+      description: "Responsive app that shows current weather and 7-day forecasts using a public API. It features location detection, dynamic weather icons, and efficient API integration. Designed mobile-first and optimized for performance and usability on various devices.",
+      url: "https://github.com/SriVishnu1011"
+    },
+    3: {
+      title: "To-Do List",
+      description: "A simple, clean to-do list app with localStorage persistence to keep your tasks saved across sessions. Includes add, delete, and mark-as-done functionalities with a polished UI. This project highlights my skills in dynamic DOM manipulation and client-side data management.",
+      url: "https://github.com/SriVishnu1011"
+    }
+  };
+
+  function encodePass(pass) {
+    return btoa(pass);
+  }
+  function decodePass(encoded) {
+    return atob(encoded);
+  }
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '{}');
+  }
+  function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+  function setLoggedInUser(email) {
+    localStorage.setItem('loggedInUser', email);
+  }
+  function getLoggedInUser() {
+    return localStorage.getItem('loggedInUser');
+  }
+  function clearLoggedInUser() {
+    localStorage.removeItem('loggedInUser');
+  }
+
+  function showLogin() {
+    signupBox.style.display = 'none';
+    loginBox.style.display = 'block';
+    loginError.style.display = 'none';
+    signupError.style.display = 'none';
+  }
+  function showSignup() {
+    loginBox.style.display = 'none';
+    signupBox.style.display = 'block';
+    loginError.style.display = 'none';
+    signupError.style.display = 'none';
+  }
+  showSignupBtn.addEventListener('click', e => {
+    e.preventDefault();
+    showSignup();
+  });
+  showLoginBtn.addEventListener('click', e => {
+    e.preventDefault();
+    showLogin();
+  });
+
+  signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+    signupError.style.display = 'none';
+    const email = signupForm['signup-email'].value.trim().toLowerCase();
+    const password = signupForm['signup-password'].value;
+    if (!isValidEmail(email)) {
+      signupError.textContent = 'Please enter a valid email.';
+      signupError.style.display = 'block';
+      return;
+    }
+    if (password.length < 6) {
+      signupError.textContent = 'Password must be at least 6 characters.';
+      signupError.style.display = 'block';
+      return;
+    }
+    const users = getUsers();
+    if (users[email]) {
+      signupError.textContent = 'Email is already registered. Please login.';
+      signupError.style.display = 'block';
+      return;
+    }
+    users[email] = encodePass(password);
+    saveUsers(users);
+    alert('Sign up successful! Please login now.');
+    showLogin();
+  });
+
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    loginError.style.display = 'none';
+    const email = loginForm['login-email'].value.trim().toLowerCase();
+    const password = loginForm['login-password'].value;
+    if (!isValidEmail(email)) {
+      loginError.textContent = 'Please enter a valid email.';
+      loginError.style.display = 'block';
+      return;
+    }
+    if (password.length === 0) {
+      loginError.textContent = 'Please enter your password.';
+      loginError.style.display = 'block';
+      return;
+    }
+    const users = getUsers();
+    if (!users[email]) {
+      loginError.textContent = 'No account found for this email.';
+      loginError.style.display = 'block';
+      return;
+    }
+    const storedPass = decodePass(users[email]);
+    if (password !== storedPass) {
+      loginError.textContent = 'Incorrect password.';
+      loginError.style.display = 'block';
+      return;
+    }
+    setLoggedInUser(email);
+    loginForm.reset();
+    initApp();
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    clearLoggedInUser();
+    location.reload();
+  });
+
+  function showSection(sectionId) {
+    navButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-section') === sectionId));
+    sections.forEach(section => {
+      if (section.id === sectionId) {
+        section.classList.add('active');
+        section.focus();
+      } else {
+        section.classList.remove('active');
+      }
+    });
+    if(sectionId !== 'projects') {
+      document.getElementById('project-details').style.display = 'none';
+    }
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  navButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const target = button.getAttribute('data-section');
+      showSection(target);
+    });
+  });
+
+  // Project items click - show detail
+  const projectList = document.getElementById('project-list');
+  const projectDetails = document.getElementById('project-details');
+  const projectDetailTitle = document.getElementById('project-detail-title');
+  const projectDetailDescription = document.getElementById('project-detail-description');
+  const projectDetailLink = document.getElementById('project-detail-link');
+
+  projectList.addEventListener('click', e => {
+    let target = e.target;
+    while (target && !target.classList.contains('project-item')) {
+      target = target.parentElement;
+    }
+    if (target && target.dataset.id) {
+      const id = target.dataset.id;
+      const data = projectsData[id];
+      if (data) {
+        projectDetailTitle.textContent = data.title;
+        projectDetailDescription.textContent = data.description;
+        projectDetailLink.href = data.url;
+        projectDetailLink.textContent = 'View Project on GitHub';
+        projectDetails.style.display = 'block';
+        projectDetails.scrollIntoView({behavior:'smooth'});
+      }
+    }
+  });
+
+  function initApp() {
+    const user = getLoggedInUser();
+    if (user) {
+      header.style.display = 'block';
+      nav.style.display = 'flex';
+      mainContent.style.display = 'flex';
+      footer.style.display = 'block';
+      document.getElementById('auth-container').style.display = 'none';
+      logoutBtn.style.display = 'block';
+      showSection('about');
+    } else {
+      header.style.display = 'none';
+      nav.style.display = 'none';
+      mainContent.style.display = 'none';
+      footer.style.display = 'none';
+      logoutBtn.style.display = 'none';
+      document.getElementById('auth-container').style.display = 'flex';
+      showLogin();
+    }
+  }
+
+  window.addEventListener('load', initApp);
+</script>
+</body>
+</html>
